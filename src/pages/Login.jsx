@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import loginImage from '../assets/image/login.svg';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../redux/features/user/userSlice';
+import { googleLogin, loginUser } from '../redux/features/user/userSlice';
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
+    dispatch(googleLogin());
     //  Google Login
   };
 

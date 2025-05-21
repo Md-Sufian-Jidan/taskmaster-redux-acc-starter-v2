@@ -12,7 +12,7 @@ const PrivateRoute = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       console.log(user);
       if (user) {
         dispatch(setUser({
@@ -25,6 +25,9 @@ const PrivateRoute = ({ children }) => {
         dispatch(toggleLoading(false));
       }
     })
+    return () => {
+      unsubscribe()
+    };
   }, []);
 
   if (isLoading) {

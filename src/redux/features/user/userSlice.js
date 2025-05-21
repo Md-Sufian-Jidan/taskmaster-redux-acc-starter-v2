@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import auth from '../../../utils/firebase.config';
 const initialState = {
-  name: 'Mir Hussain',
-  email: 'mir@gmail.com',
+  name: '',
+  email: '',
   isLoading: true,
   isError: false,
   error: "",
@@ -29,6 +29,16 @@ export const loginUser = createAsyncThunk("userSlice/loginUser",
       email: data.user.email
     }
   });
+
+export const googleLogin = createAsyncThunk("userSlice/googleLogin", async () => {
+  const provider = new GoogleAuthProvider();
+  const data = await signInWithPopup(auth, provider);
+  console.log(data);
+  return {
+    name: data.user.displayName,
+    email: data.user.email,
+  }
+});
 
 const userSlice = createSlice({
   name: 'userSlice',
@@ -62,7 +72,7 @@ const userSlice = createSlice({
         state.isError = false;
         state.error = "";
       })
-      .addCase(createUser.rejected, (state, { action }) => {
+      .addCase(createUser.rejected, (state, action) => {
         state.name = "";
         state.email = "";
         state.isLoading = false;
@@ -83,13 +93,34 @@ const userSlice = createSlice({
         state.isError = false;
         state.error = "";
       })
-      .addCase(loginUser.rejected, (state, { action }) => {
+      .addCase(loginUser.rejected, (state, action) => {
         state.name = "";
         state.email = "";
         state.isLoading = false;
         state.isError = true;
         state.error = action.error.message;
       })
+      .addCase(googleLogin.pending, (state) => {
+        state.name = "";
+        state.email = "";
+        state.isLoading = true;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(googleLogin.fulfilled, (state, { payload }) => {
+        state.name = payload.name;
+        state.email = payload.email;
+        state.isLoading = false;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(googleLogin.rejected, (state, action) => {
+        state.name = "";
+        state.email = "";
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action?.error.message || "Something went wrong";
+      });
   },
 });
 
