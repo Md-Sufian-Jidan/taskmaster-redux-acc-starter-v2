@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 import auth from '../../../utils/firebase.config';
 const initialState = {
   name: 'Mir Hussain',
@@ -21,6 +21,15 @@ export const createUser = createAsyncThunk("userSlice/createUser",
     };
   });
 
+export const loginUser = createAsyncThunk("userSlice/loginUser",
+  async ({ email, password }) => {
+    const data = await signInWithEmailAndPassword(auth, email, password);
+    return {
+      name: data.user.displayName,
+      email: data.user.email
+    }
+  });
+
 const userSlice = createSlice({
   name: 'userSlice',
   initialState,
@@ -31,6 +40,10 @@ const userSlice = createSlice({
     },
     toggleLoading: (state, { payload }) => {
       state.isLoading = payload
+    },
+    logout: (state) => {
+      state.name = "",
+        state.email = ""
     }
   },
   extraReducers: (builder) => {
@@ -55,9 +68,30 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.error = action.error.message;
-      });
+      })
+      .addCase(loginUser.pending, (state) => {
+        state.name = "";
+        state.email = "";
+        state.isLoading = true;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(loginUser.fulfilled, (state, { payload }) => {
+        state.name = payload.name;
+        state.email = payload.email;
+        state.isLoading = false;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(loginUser.rejected, (state, { action }) => {
+        state.name = "";
+        state.email = "";
+        state.isLoading = false;
+        state.isError = true;
+        state.error = action.error.message;
+      })
   },
 });
 
-export const { setUser ,toggleLoading} = userSlice.actions;
+export const { setUser, toggleLoading, logout } = userSlice.actions;
 export default userSlice.reducer;
