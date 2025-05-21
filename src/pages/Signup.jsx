@@ -31,7 +31,8 @@ const Signup = () => {
     dispatch(
       createUser({
         email,
-        password
+        password,
+        name
       }));
     // Email Password signup
     console.log(name, email, password);

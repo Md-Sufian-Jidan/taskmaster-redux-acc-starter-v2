@@ -1,7 +1,12 @@
 import { Menu, Transition } from '@headlessui/react';
+import { signOut } from 'firebase/auth';
 import { Fragment } from 'react';
+import auth from '../../utils/firebase.config';
 
 export default function MenuDropdown({ children }) {
+  const logout = () => {
+    signOut(auth);
+  }
   return (
     <Menu as="div" className="relative inline-block text-left bg-white z-[999]">
       <div>
@@ -21,9 +26,8 @@ export default function MenuDropdown({ children }) {
             <Menu.Item>
               {({ active }) => (
                 <button
-                  className={`${
-                    active ? 'bg-primary text-white' : 'text-gray-900'
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  className={`${active ? 'bg-primary text-white' : 'text-gray-900'
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   Profile
                 </button>
@@ -32,9 +36,8 @@ export default function MenuDropdown({ children }) {
             <Menu.Item>
               {({ active }) => (
                 <button
-                  className={`${
-                    active ? 'bg-primary text-white' : 'text-gray-900'
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  className={`${active ? 'bg-primary text-white' : 'text-gray-900'
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   Settings
                 </button>
@@ -43,9 +46,9 @@ export default function MenuDropdown({ children }) {
             <Menu.Item>
               {({ active }) => (
                 <button
-                  className={`${
-                    active ? 'bg-primary text-white' : 'text-gray-900'
-                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                  onClick={logout}
+                  className={`${active ? 'bg-primary text-white' : 'text-gray-900'
+                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                 >
                   Logout
                 </button>
