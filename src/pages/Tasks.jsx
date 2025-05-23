@@ -4,7 +4,7 @@ import TaskCard from '../components/tasks/TaskCard';
 import AddTaskModal from '../components/tasks/AddTaskModal';
 import { useState } from 'react';
 import MenuDropdown from '../components/ui/MenuDropdown';
-import { useGetTasksQuery } from '../redux/features/api/baseApi';
+import { useGetTasksQuery } from '../redux/features/tasks/tasksApi';
 
 const Tasks = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -58,7 +58,7 @@ const Tasks = () => {
               </div>
               <div className="space-y-3">
                 {pendingTasks?.map((item) => (
-                  <TaskCard key={item.id} task={item} />
+                  <TaskCard key={item._id} task={item} />
                 ))}
               </div>
             </div>
@@ -71,7 +71,7 @@ const Tasks = () => {
               </div>
               <div className="space-y-3">
                 {runningTasks?.map((item) => (
-                  <TaskCard key={item.id} task={item} />
+                  <TaskCard key={item._id} task={item} />
                 ))}
               </div>
             </div>
@@ -84,7 +84,7 @@ const Tasks = () => {
               </div>
               <div className="space-y-3">
                 {doneTasks?.map((item) => (
-                  <TaskCard key={item.id} task={item} />
+                  <TaskCard key={item._id} task={item} />
                 ))}
               </div>
             </div>

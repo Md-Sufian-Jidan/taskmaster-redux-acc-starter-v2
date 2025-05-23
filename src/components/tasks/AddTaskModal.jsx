@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import Modal from '../ui/Modal';
-import { useAddTasksMutation } from '../../redux/features/api/baseApi';
+import { useAddTasksMutation } from '../../redux/features/tasks/tasksApi';
 
 const AddTaskModal = ({ isOpen, setIsOpen }) => {
   const { register, handleSubmit, reset } = useForm();
